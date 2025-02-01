@@ -37,8 +37,8 @@ function updateBoxes(container, value) {
   digits.forEach((digit, index) => {
     if (digit.innerText !== strValue[index]) {
       digit.innerText = strValue[index]
-      digit.style.transform = 'scale(1.2)'
-      setTimeout(() => (digit.style.transform = 'scale(1)'), 110)
+      digit.style.transform = 'scale(1.1)'
+      setTimeout(() => (digit.style.transform = 'scale(1)'), 150)
     }
   })
 }
@@ -49,8 +49,34 @@ function updateCountdown() {
   const timeLeft = targetDate - now
 
   if (timeLeft <= 0) {
-    document.getElementById('countdown').innerHTML = "🎉 Time's Up!"
-    return
+    const countdown = document.getElementById('countdown')
+    countdown.style.fontFamily = "'Comic Sans MS', cursive"
+    countdown.textContent = "🎉 Congrats! You're now 1 year older! 🎉 (haha, oldie)"
+
+    confetti({
+      particleCount: 100,
+      spread: 75,
+      origin: { y: 0.6 },
+    })
+
+    const label = document.getElementById('label')
+    label.textContent = 'Happy Birthday!!'
+
+    let titleColor = 0
+    function changeTitleColor() {
+      label.style.color = `hsl(${titleColor}, 80%, 55%)`
+      titleColor++
+    }
+
+    let intervalId = null
+    if (intervalId) {
+      clearInterval(intervalId)
+      intervalId = null
+      titleColor = 0
+      label.style.color = colorLight
+    } else {
+      intervalId = setInterval(changeTitleColor, 25)
+    }
   }
 
   const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24))
@@ -72,3 +98,21 @@ createBoxes(document.getElementById('minutes-box'), 2)
 createBoxes(document.getElementById('seconds-box'), 2)
 
 updateCountdown()
+
+//CREDITS
+const credits = document.getElementById('credits')
+let titleColor = 0
+function changeTitleColor() {
+  credits.style.color = `hsl(${titleColor}, 80%, 55%)`
+  titleColor++
+}
+
+let intervalId = null
+if (intervalId) {
+  clearInterval(intervalId)
+  intervalId = null
+  titleColor = 0
+  credits.style.color = colorLight
+} else {
+  intervalId = setInterval(changeTitleColor, 25)
+}
